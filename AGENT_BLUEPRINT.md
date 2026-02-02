@@ -130,53 +130,133 @@ Follows AGENT_BLUEPRINT.md
 
 ## Roadmap
 
-Canonical project direction lives in `roadmap/`.
+Canonical project direction lives in `roadmap/`. The presence of `roadmap/index.md` identifies a project as using this roadmap system.
 
 ### Structure
 
 ```
 roadmap/
-├── README.md      # System docs and rules
-├── index.md       # Directory of work units by status
+├── index.md       # Project overview and directory of work units
 ├── _template.md   # Starting point for new work units
-├── *.md           # Individual work unit files
+├── *.md           # Individual work unit files (with frontmatter)
 └── archived/      # Completed or dropped work units
 ```
+
+### Work Unit Frontmatter
+
+Every work unit file **must** begin with YAML frontmatter for machine parsing:
+
+```yaml
+---
+title: "Feature Name"
+status: idea | planned | active | paused | done | dropped
+description: "One-line summary of what this work unit accomplishes"
+tags: [area/frontend, type/feature]  # Optional but recommended
+priority: medium                      # high | medium | low
+created: 2024-01-15
+updated: 2024-01-20
+effort: M                             # Optional: XS | S | M | L | XL
+depends-on: []                        # Optional: filenames of blocking work units
+---
+```
+
+**Required fields:**
+- `title` — Display name for the work unit
+- `status` — Current state (see Status Definitions below)
+- `description` — One-line summary
+
+**Recommended fields:**
+- `tags` — Array for categorization and filtering
+- `priority` — high | medium | low (default: medium)
+- `created` — Date work unit was created (YYYY-MM-DD)
+- `updated` — Date of last modification (YYYY-MM-DD)
+
+**Optional fields:**
+- `effort` — T-shirt size estimate: XS | S | M | L | XL
+- `depends-on` — Array of work unit filenames this is blocked by
+
+### Status Definitions
+
+| Status | Meaning | Kanban Column |
+|--------|---------|---------------|
+| `idea` | Captured but not yet scoped | Backlog |
+| `planned` | Scoped and ready to start | Backlog |
+| `active` | Currently being worked on | In Progress |
+| `paused` | Started but blocked or deprioritized | In Progress |
+| `done` | Shipped and working | Done |
+| `dropped` | Decided not to pursue | (hidden) |
 
 ### index.md Template
 
 ```markdown
+---
+title: "Project Name Roadmap"
+goal: "One sentence: what this project exists to achieve."
+---
+
 # Roadmap
-
-## Goal
-
-[One sentence: what this project exists to achieve.]
 
 ## Current Focus
 
-[What is actively being worked on.]
+[What is actively being worked on right now.]
 
-## Active
+## Work Units
 
-- [work-unit-name.md](./work-unit-name.md) — one-line description
+See individual `*.md` files in this directory. Each contains frontmatter with status, priority, and other metadata.
 
-## Backlog
+## Quick Ideas
 
-- [Feature idea or deferred work — no file needed yet]
+Ideas not yet promoted to work units:
+
+- [Idea that doesn't need a file yet]
 - [Another idea]
+```
 
-## Done
+### _template.md
 
-- [Completed work — move file to archived/ when done]
+```markdown
+---
+title: "Work Unit Title"
+status: idea
+description: "One-line summary of what this accomplishes"
+tags: []
+priority: medium
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+---
+
+# Work Unit Title
+
+## Problem / Intent
+
+[Why this exists. What problem it solves.]
+
+## Constraints
+
+[Hard requirements or limitations.]
+
+## Proposed Approach
+
+[High-level solution direction.]
+
+## Open Questions
+
+[Unresolved decisions or unknowns.]
+
+## Notes
+
+[Design details, context, implementation notes as work progresses.]
 ```
 
 ### Rules
 
-- `index.md` is the single source of truth for project direction.
-- Small tasks and ideas can live as bullet points in index.md without their own file.
-- Create a dedicated `*.md` file when a work unit needs design notes or extended context.
+- `roadmap/index.md` existence identifies a compatible project.
+- Every work unit file must have valid YAML frontmatter.
+- Status lives in frontmatter, not in prose.
+- Small ideas can live as bullets in index.md; promote to files when they need detail.
 - When a work unit reaches `done` or `dropped`, move the file to `archived/`.
-- Keep index.md short; archive completed work to keep readable.
+- Update the `updated` field whenever you modify a work unit.
+- Use consistent tag prefixes: `area/`, `type/`, `tech/` for discoverability.
 
 ---
 

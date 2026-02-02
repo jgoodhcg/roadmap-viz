@@ -1,0 +1,47 @@
+# AGENTS
+
+Follows AGENT_BLUEPRINT.md
+
+## Project Overview
+
+A CLI utility to visualize roadmaps from other projects, providing a basic web view of the aggregated data.
+
+## Validation Commands
+
+| Level | Command | When |
+|-------|---------|------|
+| 1 | `bun run lint` | After every change |
+| 2 | `bun run build` | After code changes (if applicable) |
+| 3 | `bun test` | Before completing work |
+| 4 | `bun run e2e` | After UI changes |
+
+*(Note: Validation commands are provisional and should be updated once the technology stack is finalized.)*
+
+## Allowed Commands
+
+- `ls` - List files
+- `cat` - Read files
+- `grep` - Search files
+- `npm` - Node package manager (if selected)
+
+## Require Confirmation
+
+- `rm` - Deletion is destructive
+- `git commit` - User should review commits
+- `git push` - User handles remote synchronization
+
+## Never Run
+
+- `rm -rf /` - Obvious safety
+- `git reset --hard` - Destructive history rewrite
+
+## Project-Specific Rules
+
+- Adhere to the structure defined in `AGENT_BLUEPRINT.md`.
+- Ensure the CLI is user-friendly and provides clear feedback.
+
+## Key Files
+
+- `AGENT_BLUEPRINT.md` - The source of truth for agent policies.
+- `roadmap/` - Directory containing the project's own roadmap.
+- `DESIGN_SYSTEM_GUIDE.md` - Guide for the web view's design system.
