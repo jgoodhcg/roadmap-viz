@@ -6,11 +6,14 @@ import { homedir } from "node:os";
 export interface WorkUnit {
   filename: string;
   title: string;
-  status: "idea" | "planned" | "active" | "paused" | "done" | "dropped";
+  status: "idea" | "planned" | "active" | "paused" | "done" | "dropped" | "queued" | "focus";
   description: string;
   priority: "high" | "medium" | "low";
+  effort?: string;
   tags: string[];
   updated: string;
+  created?: string;
+  body: string;
 }
 
 export interface ProjectRoadmap {
@@ -65,26 +68,40 @@ async function parseProjectRoadmap(projectPath: string): Promise<ProjectRoadmap>
   const { data: indexData } = matter(indexContent);
 
   const roadmapDir = join(projectPath, "roadmap");
-  const files = await readdir(roadmapDir, { withFileTypes: true });
+  const archivedDir = join(roadmapDir, "archived");
   
   const workUnits: WorkUnit[] = [];
 
-  for (const file of files) {
-    if (file.isFile() && file.name.endsWith(".md") && file.name !== "index.md" && !file.name.startsWith("_")) {
-      const content = await Bun.file(join(roadmapDir, file.name)).text();
-      const { data } = matter(content);
-      
-      workUnits.push({
-        filename: file.name,
-        title: data.title || file.name,
-        status: data.status || "idea",
-        description: data.description || "",
-        priority: data.priority || "medium",
-        tags: data.tags || [],
-        updated: data.updated || ""
-      });
+  // Helper to process files in a directory
+  const processDir = async (dir: string) => {
+    try {
+      const files = await readdir(dir, { withFileTypes: true });
+      for (const file of files) {
+        if (file.isFile() && file.name.endsWith(".md") && file.name !== "index.md" && !file.name.startsWith("_")) {
+          const content = await Bun.file(join(dir, file.name)).text();
+          const { data, content: body } = matter(content);
+          
+          workUnits.push({
+            filename: file.name,
+            title: data.title || file.name,
+            status: data.status || "idea",
+            description: data.description || "",
+            priority: data.priority || "medium",
+            effort: data.effort,
+            tags: data.tags || [],
+            updated: data.updated || "",
+            created: data.created || "",
+            body: body
+          });
+        }
+      }
+    } catch (e) {
+      // Directory might not exist (e.g. archived), just ignore
     }
-  }
+  };
+
+  await processDir(roadmapDir);
+  await processDir(archivedDir);
 
   return {
     path: projectPath,
