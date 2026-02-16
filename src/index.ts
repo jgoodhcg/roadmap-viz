@@ -6,14 +6,19 @@ const scanPaths: string[] = [];
 let port = 3000;
 
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === "--port" || args[i] === "-p") {
-    const val = parseInt(args[i + 1], 10);
+  const arg = args[i];
+  if (!arg) {
+    continue;
+  }
+
+  if (arg === "--port" || arg === "-p") {
+    const val = parseInt(args[i + 1] ?? "", 10);
     if (!isNaN(val)) {
       port = val;
       i++; // skip next arg
     }
   } else {
-    scanPaths.push(args[i]);
+    scanPaths.push(arg);
   }
 }
 

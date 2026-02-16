@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "context:build": "bun run src/export-context.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^25.2.0"

@@ -24,15 +24,16 @@ export interface ProjectRoadmap {
   workUnits: WorkUnit[];
 }
 
-export async function scanForRoadmaps(basePaths: string[]): Promise<ProjectRoadmap[]> {
+export async function scanForRoadmaps(scanPaths: string[]): Promise<ProjectRoadmap[]> {
   const roadmaps: ProjectRoadmap[] = [];
+  const discoveredProjects = new Set<string>();
 
-  for (const basePath of basePaths) {
-    const resolvedPath = basePath.startsWith("~") 
-      ? join(homedir(), basePath.slice(1)) 
-      : resolve(basePath);
-    
-    console.log(`Debug: Scanning resolved path: ${resolvedPath}`);
+  for (const scanPath of scanPaths) {
+    const resolvedPath = normalizePath(scanPath);
+
+    if (await isRoadmapProject(resolvedPath)) {
+      discoveredProjects.add(resolvedPath);
+    }
 
     try {
       const entries = await readdir(resolvedPath, { withFileTypes: true });
@@ -40,17 +41,8 @@ export async function scanForRoadmaps(basePaths: string[]): Promise<ProjectRoadm
       for (const entry of entries) {
         if (entry.isDirectory()) {
           const projectPath = join(resolvedPath, entry.name);
-          const roadmapIndexPath = join(projectPath, "roadmap", "index.md");
-
-          try {
-            const indexStat = await stat(roadmapIndexPath);
-            if (indexStat.isFile()) {
-              console.log(`Debug: Found roadmap at ${projectPath}`);
-              const roadmap = await parseProjectRoadmap(projectPath);
-              roadmaps.push(roadmap);
-            }
-          } catch {
-            // No roadmap/index.md, skip
+          if (await isRoadmapProject(projectPath)) {
+            discoveredProjects.add(projectPath);
           }
         }
       }
@@ -59,7 +51,31 @@ export async function scanForRoadmaps(basePaths: string[]): Promise<ProjectRoadm
     }
   }
 
+  for (const projectPath of discoveredProjects) {
+    try {
+      const roadmap = await parseProjectRoadmap(projectPath);
+      roadmaps.push(roadmap);
+    } catch (err) {
+      console.error(`Error parsing roadmap at ${projectPath}:`, err);
+    }
+  }
+
   return roadmaps;
+}
+
+async function isRoadmapProject(projectPath: string): Promise<boolean> {
+  try {
+    const indexStat = await stat(join(projectPath, "roadmap", "index.md"));
+    return indexStat.isFile();
+  } catch {
+    return false;
+  }
+}
+
+function normalizePath(path: string): string {
+  return path.startsWith("~")
+    ? join(homedir(), path.slice(1))
+    : resolve(path);
 }
 
 async function parseProjectRoadmap(projectPath: string): Promise<ProjectRoadmap> {

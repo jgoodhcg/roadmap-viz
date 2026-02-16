@@ -10,12 +10,12 @@ A CLI utility to visualize roadmaps from other projects, providing a basic web v
 
 | Level | Command | When |
 |-------|---------|------|
-| 1 | `bun run lint` | After every change |
-| 2 | `bun run build` | After code changes (if applicable) |
-| 3 | `bun test` | Before completing work |
-| 4 | `bun run e2e` | After UI changes |
+| 1 | `npm exec tsc -- --noEmit` | After every change |
+| 2 | `npm run context:build -- . --out ./.logs/roadmap-context.json` | After scanner/context-pipeline changes |
+| 3 | `bun test` | Before completing work (when tests exist) |
+| 4 | `n/a` | E2E test command not implemented yet |
 
-*(Note: Validation commands are provisional and should be updated once the technology stack is finalized.)*
+*(Update this table when lint/build/e2e scripts are added.)*
 
 ## Allowed Commands
 
