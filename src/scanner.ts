@@ -6,7 +6,7 @@ import { homedir } from "node:os";
 export interface WorkUnit {
   filename: string;
   title: string;
-  status: "idea" | "planned" | "active" | "paused" | "done" | "dropped" | "queued" | "focus";
+  status: "draft" | "ready" | "active" | "done" | "dropped" | "idea" | "planned" | "paused" | "queued" | "focus";
   description: string;
   priority: "high" | "medium" | "low";
   effort?: string;
@@ -100,7 +100,7 @@ async function parseProjectRoadmap(projectPath: string): Promise<ProjectRoadmap>
           workUnits.push({
             filename: file.name,
             title: data.title || file.name,
-            status: data.status || "idea",
+            status: data.status || "draft",
             description: data.description || "",
             priority: data.priority || "medium",
             effort: data.effort,

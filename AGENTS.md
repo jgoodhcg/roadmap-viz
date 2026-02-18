@@ -1,10 +1,26 @@
 # AGENTS
 
-Follows AGENT_BLUEPRINT.md
+Follows `AGENT_BLUEPRINT.md` (version: 1.4.4)
 
 ## Project Overview
 
-A CLI utility to visualize roadmaps from other projects, providing a basic web view of the aggregated data.
+A CLI utility and web server that visualizes roadmaps from other projects following the Agent Blueprint convention. Scans local directories for `roadmap/index.md`, aggregates work units, and serves a Kanban board via Bun + HTMX.
+
+## Stack
+
+- TypeScript (Bun runtime)
+- HTMX (no-build frontend)
+- `gray-matter` for frontmatter parsing
+- `marked` for Markdown rendering
+
+## Commit Trailer Template
+
+```text
+Co-authored-by: [AI_PRODUCT_NAME] <[AI_PRODUCT_EMAIL]>
+AI-Provider: [AI_PROVIDER]
+AI-Product: [AI_PRODUCT_LINE]
+AI-Model: [AI_MODEL]
+```
 
 ## Validation Commands
 
@@ -19,29 +35,49 @@ A CLI utility to visualize roadmaps from other projects, providing a basic web v
 
 ## Allowed Commands
 
-- `ls` - List files
-- `cat` - Read files
-- `grep` - Search files
-- `npm` - Node package manager (if selected)
+- `ls` — List files
+- `cat` — Read files
+- `grep` — Search files
+- `bun` — Bun runtime and package manager
 
 ## Require Confirmation
 
-- `rm` - Deletion is destructive
-- `git commit` - User should review commits
-- `git push` - User handles remote synchronization
+- `rm` — Deletion is destructive
+- `git commit` — User should review commits
+- `git push` — User handles remote synchronization
 
 ## Never Run
 
-- `rm -rf /` - Obvious safety
-- `git reset --hard` - Destructive history rewrite
+- `rm -rf /` — Obvious safety
+- `git reset --hard` — Destructive history rewrite
 
 ## Project-Specific Rules
 
 - Adhere to the structure defined in `AGENT_BLUEPRINT.md`.
 - Ensure the CLI is user-friendly and provides clear feedback.
 
+## Decision Artifacts
+
+- For high-impact or irreversible decisions, record a decision matrix in `.decisions/[name].json`.
+- Use `matrix-reloaded` format for structured comparison.
+- Do not run `matrix-reloaded` CLI commands from agent sessions; use project-provided matrix instructions/schema.
+- Optional: add `.decisions/[name].md` for human-readable narrative context.
+- Treat the JSON decision matrix as the authoritative record.
+
+## References
+
+- For design system conventions, see `DESIGN_SYSTEM_GUIDE.md`
+- For decision records and optional matrix format, see `AGENT_BLUEPRINT.md` section `Decision Artifacts [BP-DECISIONS]`.
+
 ## Key Files
 
-- `AGENT_BLUEPRINT.md` - The source of truth for agent policies.
-- `roadmap/` - Directory containing the project's own roadmap.
-- `DESIGN_SYSTEM_GUIDE.md` - Guide for the web view's design system.
+- `AGENT_BLUEPRINT.md` — The source of truth for agent policies.
+- `roadmap/` — Directory containing the project's own roadmap.
+- `DESIGN_SYSTEM_GUIDE.md` — Guide for the web view's design system.
+- `src/scanner.ts` — Scans directories for roadmap projects.
+- `src/server.ts` — Serves the Kanban board web UI.
+- `src/export-context.ts` — Builds context bundles for external tools.
+
+## User Profile (optional)
+
+See `.agent-profile.md` (git-ignored) for interaction preferences. Create on project init or alignment.

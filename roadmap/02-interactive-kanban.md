@@ -1,12 +1,12 @@
 ---
 title: "Interactive Kanban (Drag & Drop)"
-status: planned
+status: draft
 description: "Enable drag-and-drop support to move cards between columns and update their status/tags on disk."
 tags: [type/feature, area/frontend, area/backend]
 priority: high
 effort: L
 created: 2026-02-01
-updated: 2026-02-01
+updated: 2026-02-16
 depends-on: ["01-mvp.md"]
 ---
 

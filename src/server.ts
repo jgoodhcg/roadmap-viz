@@ -293,15 +293,17 @@ function renderPage(roadmaps: ProjectRoadmap[]): string {
 }
 
 function renderProjectTab(project: ProjectRoadmap, index: number): string {
-  const backlog = project.workUnits.filter(u => u.status === 'idea' || u.status === 'planned');
-  
-  const focus = project.workUnits.filter(u => 
-    u.status === 'focus' || 
+  const backlog = project.workUnits.filter(u =>
+    u.status === 'draft' || u.status === 'ready' || u.status === 'idea' || u.status === 'planned'
+  );
+
+  const focus = project.workUnits.filter(u =>
+    u.status === 'focus' ||
     ((u.status === 'active' || u.status === 'paused') && u.tags.includes('focus'))
   );
 
-  const queue = project.workUnits.filter(u => 
-    (u.status === 'active' || u.status === 'paused' || u.status === 'queued') && 
+  const queue = project.workUnits.filter(u =>
+    (u.status === 'active' || u.status === 'paused' || u.status === 'queued') &&
     !u.tags.includes('focus')
   );
 

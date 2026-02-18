@@ -1,39 +1,35 @@
 # roadmap-viz
 
-Build a local context bundle from roadmap files across projects, then use that bundle for prioritization work in Codex.
+A personal tool that scans local projects for roadmap files and renders them as a Kanban board in the browser.
 
-## Local Config (Not Committed)
+I use [Agent Blueprint](AGENT_BLUEPRINT.md) across my projects — each one has a `roadmap/` directory with structured work units in Markdown. This tool aggregates those roadmaps and gives me a single view of everything in flight.
 
-Create `roadmap-sources.json` from `roadmap-sources.example.json`:
+This isn't intended for mass adoption. It's a personal utility that happens to be public.
+
+## Run the web server
+
+```bash
+bun run src/index.ts
+```
+
+Opens a local Kanban board at `http://localhost:3000` showing all discovered projects grouped by tabs.
+
+## Build a context bundle
+
+```bash
+npm run context:build
+```
+
+Exports roadmap data as JSON for use with external tools (e.g. feeding context to Codex for prioritization). See `npm run context:build -- --help` for options.
+
+## Local config
+
+Create `roadmap-sources.json` (gitignored) to configure which directories to scan:
 
 ```json
 {
-  "scanPaths": [
-    "~/projects",
-    "~/projects/games"
-  ]
+  "scanPaths": ["~/projects", "~/projects/games"]
 }
 ```
 
-`roadmap-sources.json` is gitignored on purpose.
-
-## Build Context Bundle
-
-```bash
-# Uses scan paths from roadmap-sources.json (if present) or defaults
-npm run context:build
-
-# Override scan paths ad hoc
-npm run context:build -- ~/projects ~/projects/games
-
-# Custom sources file
-npm run context:build -- --sources ./roadmap-sources.json
-
-# Override output path (default: .logs/roadmap-context.json)
-npm run context:build -- --out ./.logs/roadmap-context.json
-
-# Include full markdown body instead of summaries
-npm run context:build -- --full-body
-```
-
-Default output is `.logs/roadmap-context.json` (already gitignored).
+If absent, defaults to `~/projects` and `~/projects/games`.
