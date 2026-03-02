@@ -1,6 +1,6 @@
 # AGENTS
 
-Follows `AGENT_BLUEPRINT.md` (version: 1.4.4)
+Follows `AGENT_BLUEPRINT.md` (version: 1.4.5)
 
 ## Project Overview
 
@@ -21,6 +21,21 @@ AI-Provider: [AI_PROVIDER]
 AI-Product: [AI_PRODUCT_LINE]
 AI-Model: [AI_MODEL]
 ```
+
+Template rules:
+- `AI_PRODUCT_LINE` must be one of: `codex|claude|gemini|opencode`.
+- Determine `AI_PRODUCT_LINE` from current session:
+  - Codex or ChatGPT coding agent -> `codex`
+  - Claude -> `claude`
+  - Gemini -> `gemini`
+  - OpenCode -> `opencode` (regardless underlying provider/model, including z.ai)
+- Determine `AI_PROVIDER` and `AI_MODEL` from runtime model metadata.
+- `AI_PRODUCT_NAME` and `AI_PRODUCT_EMAIL` format:
+  - `codex` -> `Codex <codex@users.noreply.github.com>`
+  - `claude` -> `Claude <claude@users.noreply.github.com>`
+  - `gemini` -> `Gemini <google-gemini@users.noreply.github.com>`
+  - `opencode` -> `GLM <zai-org@users.noreply.github.com>`
+- Fill this template at commit time; do not persist filled values in `AGENTS.md`.
 
 ## Validation Commands
 
