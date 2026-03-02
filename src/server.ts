@@ -42,6 +42,14 @@ export async function startServer(scanPaths: string[] = DEFAULT_SCAN_PATHS, pref
             return new Response("Not Found", { status: 404 });
           }
 
+          // 3. API endpoint for aggregated roadmaps JSON
+          if (url.pathname === "/api/roadmaps") {
+            const roadmaps = await scanForRoadmaps(scanPaths);
+            return new Response(JSON.stringify(roadmaps), {
+              headers: { "Content-Type": "application/json" }
+            });
+          }
+
           return new Response("Not Found", { status: 404 });
         },
       });

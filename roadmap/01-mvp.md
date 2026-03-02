@@ -1,11 +1,11 @@
 ---
 title: "MVP: CLI Scanner & Kanban Board"
-status: active
+status: done
 description: "Implement the core CLI to scan projects and serve a web-based Kanban board."
 tags: [type/feature, area/cli, area/frontend]
 priority: high
 created: 2026-02-01
-updated: 2026-02-01
+updated: 2026-02-23
 ---
 
 # MVP: CLI Scanner & Kanban Board
